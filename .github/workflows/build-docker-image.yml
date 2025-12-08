@@ -1,23 +1,16 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'Dockerfile'
-      - 'index.js'
-      - 'package.json'
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      version:
+        description: '请输入要打包的 Release 版本 (如 v1.0.0)'
+        required: true
+        default: 'v1.0.0'
 
 jobs:
-  build:
+  docker:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,7 +32,7 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/node-api:latest
+            ghcr.io/${{ github.repository_owner }}/echhhh:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=HTTP Server
