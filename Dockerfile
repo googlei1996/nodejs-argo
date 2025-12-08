@@ -1,15 +1,16 @@
-FROM node:alpine3.20
 
-WORKDIR /tmp
+FROM alpine:latest
 
-COPY . .
+RUN apk add --no-cache ca-certificates
 
-EXPOSE 3000/tcp
+WORKDIR /app
 
-RUN apk update && apk upgrade &&\
-    apk add --no-cache openssl curl gcompat iproute2 coreutils &&\
-    apk add --no-cache bash &&\
-    chmod +x index.js &&\
-    npm install
+COPY ech-tunnel .
+COPY entrypoint.sh .
 
-CMD ["node", "index.js"]
+RUN chmod +x ech-tunnel entrypoint.sh
+
+
+EXPOSE 8080
+
+ENTRYPOINT ["./entrypoint.sh"]
